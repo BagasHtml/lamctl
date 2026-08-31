@@ -1,4 +1,16 @@
-# lamctl
+<div align="center">
+
+```text
+.__                         __  .__   
+|  | _____    _____   _____/  |_|  |  
+|  | \__  \  /     \_/ ___\   __\  |  
+|  |__/ __ \|  Y Y  \  \___|  | |  |__
+|____(____  /__|_|  /\___  >__| |____/
+          \/      \/     \/           
+```
+
+</div>
+
 
 CLI helper untuk menyalakan XAMPP/LAMPP dan mengelola database MySQL dengan mudah — tanpa perlu ketik command panjang setiap kali.
 
