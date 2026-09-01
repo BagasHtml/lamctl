@@ -6,6 +6,7 @@ type Credential struct {
 	User     string
 	Password string
 	DBName   string
+	DBEngine string
 }
 
 type Database struct {

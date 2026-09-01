@@ -52,3 +52,7 @@ func (u *UseCase) Drop(name string) error {
 
 	return repo.DropDatabase(name)
 }
+
+func (u *UseCase) Shell(clientPath string) error {
+	return mysqldb.Shell(u.cred, clientPath)
+}

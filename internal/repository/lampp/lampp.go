@@ -3,6 +3,7 @@ package lampp
 import (
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -28,22 +29,39 @@ func (r *LamppRepository) Restart() error {
 }
 
 func (r *LamppRepository) Status() (string, error) {
-	output, err := exec.Command(r.path, "status").Output()
+	out, err := exec.Command(r.path, "status").CombinedOutput()	
+
 	if err != nil {
-		return string(output), fmt.Errorf("gagal cek status: %w", err)
+		return string(out), fmt.Errorf("gagal cek status: %w\n%s", err, out)
 	}
-	return string(output), nil
+	
+	return string(out), nil
+}
+
+func (r *LamppRepository) command(action string) *exec.Cmd {
+	if os.Geteuid() == 0 {
+		return exec.Command(r.path, action)
+	}
+
+	cmd := exec.Command("sudo", r.path, action)
+	cmd.Stdin = os.Stdin
+	
+	return cmd
 }
 
 func (r *LamppRepository) run(action string) error {
-	if err := exec.Command(r.path, action).Run(); err != nil {
-		return fmt.Errorf("gagal %s: %w", action, err)
+	out, err := r.command(action).CombinedOutput()
+
+	if err != nil {
+		return fmt.Errorf("gagal %s: %w\n%s", action, err, out)
 	}
+	fmt.Print(string(out))
+
 	return nil
 }
 
-func ParseServiceStatus(output, service string) (string, error) {
-	for _, line := range strings.Split(output, "\n") {
+func ParseServiceStatus(out, service string) (string, error) {
+	for _, line := range strings.Split(out, "\n") {
 		if strings.Contains(strings.ToLower(line), strings.ToLower(service)) {
 			return strings.TrimSpace(line), nil
 		}

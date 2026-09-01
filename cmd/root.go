@@ -39,9 +39,10 @@ dan mengelola database MySQL dengan mudah.`,
 		user, _ := cmd.Flags().GetString("user")
 		password, _ := cmd.Flags().GetString("password")
 		dbName, _ := cmd.Flags().GetString("db")
+		dbEngine, _ := cmd.Flags().GetString("dbEngine")
 
 		settings.ApplyFlags(entity.Credential{
-			Host: host, Port: port, User: user, Password: password, DBName: dbName,
+			Host: host, Port: port, User: user, Password: password, DBName: dbName, DBEngine: dbEngine,
 		})
 		return nil
 	},
@@ -57,4 +58,5 @@ func init() {
 	RootCmd.PersistentFlags().String("user", "", "Username database (default dari .env)")
 	RootCmd.PersistentFlags().String("password", "", "Password database")
 	RootCmd.PersistentFlags().String("db", "", "Nama database")
+	RootCmd.PersistentFlags().String("db_engine", "", "Database yang kamu gunakan")
 }

@@ -3,9 +3,7 @@ package setting
 import (
 	"fmt"
 	"os"
-
 	"github.com/joho/godotenv"
-
 	"stackctl/internal/entity"
 )
 
@@ -33,6 +31,7 @@ func (r *SettingRepository) Load() error {
 		User:     envOrDefault("LAMCTL_DB_USER", "root"),
 		Password: os.Getenv("LAMCTL_DB_PASS"),
 		DBName:   os.Getenv("LAMCTL_DB_NAME"),
+		DBEngine: os.Getenv("LAMCTL_DB_ENGINE"),	
 	}
 
 	return nil
@@ -62,12 +61,15 @@ func (r *SettingRepository) ApplyFlags(cred entity.Credential) {
 	if cred.DBName != "" {
 		r.credential.DBName = cred.DBName
 	}
+	if cred.DBEngine != "" {
+		r.credential.DBEngine = cred.DBEngine
+	}
 }
 
 func (r *SettingRepository) Save(cred entity.Credential) error {
 	content := fmt.Sprintf(
-		"LAMCTL_DB_HOST=%s\nLAMCTL_DB_PORT=%s\nLAMCTL_DB_USER=%s\nLAMCTL_DB_PASS=%s\nLAMCTL_DB_NAME=%s\n",
-		cred.Host, cred.Port, cred.User, cred.Password, cred.DBName,
+		"LAMCTL_DB_HOST=%s\nLAMCTL_DB_PORT=%s\nLAMCTL_DB_USER=%s\nLAMCTL_DB_PASS=%s\nLAMCTL_DB_NAME=%s\nLAMCTL_DB_ENGINE=%s\n",
+		cred.Host, cred.Port, cred.User, cred.Password, cred.DBName, cred.DBEngine,
 	)
 
 	if err := os.WriteFile(r.path, []byte(content), 0o600); err != nil {

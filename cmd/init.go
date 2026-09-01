@@ -22,6 +22,7 @@ var initCmd = &cobra.Command{
 			User     string
 			Password string
 			DBName   string
+			DBEngine string
 		}{}
 
 		questions := []*survey.Question{
@@ -48,6 +49,10 @@ var initCmd = &cobra.Command{
 				Name:   "dbname",
 				Prompt: &survey.Input{Message: "Database name (kosongkan untuk koneksi umum)"},
 			},
+			{
+				Name: "dbengine",
+				Prompt: &survey.Input{Message: "Database Engine: ", Default: "mysql"},
+			},
 		}
 
 		if err := survey.Ask(questions, &answers); err != nil {
@@ -56,7 +61,7 @@ var initCmd = &cobra.Command{
 
 		cred := entity.Credential{
 			Host: answers.Host, Port: answers.Port, User: answers.User,
-			Password: answers.Password, DBName: answers.DBName,
+			Password: answers.Password, DBName: answers.DBName, DBEngine: answers.DBEngine,
 		}
 
 		if err := settings.Save(cred); err != nil {
@@ -73,6 +78,7 @@ var initCmd = &cobra.Command{
 		_ = os.Setenv("LAMCTL_DB_USER", cred.User)
 		_ = os.Setenv("LAMCTL_DB_PASS", cred.Password)
 		_ = os.Setenv("LAMCTL_DB_NAME", cred.DBName)
+		_ = os.Setenv("LAMCTL_DB_ENGINE", cred.DBEngine)
 
 		fmt.Printf("Kredensial tersimpan di %s\n", abs)
 		return nil

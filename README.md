@@ -9,6 +9,7 @@ CLI helper untuk menyalakan XAMPP/LAMPP dan mengelola database MySQL dengan muda
 - Control layanan XAMPP/LAMPP (start, stop, restart, status)
 - Cek status per-service (misal cuma MySQL)
 - Operasi database MySQL (list, query, create, drop)
+- Buka mysql client interaktif (`lamctl mysql`)
 - Setup kredensial interaktif (`lamctl init`)
 - Support override via flag CLI, environment variable `.env`, dan nilai default
 - Terintegrasi ke sistem — bisa dipanggil dari mana saja
@@ -48,6 +49,7 @@ lamctl init
 ? Database username (root):
 ? Database password (kosongkan jika tidak ada):
 ? Database name (kosongkan untuk koneksi umum):
+? Database Engine (mysql):
 
 Kredensial tersimpan di .env
 ```
@@ -83,7 +85,13 @@ lamctl db list                                    # List semua database
 lamctl db query "SELECT * FROM users"             # Jalankan query SQL
 lamctl db create nama_database                    # Buat database baru
 lamctl db drop nama_database                      # Hapus database
+lamctl mysql                                      # Buka mysql client interaktif
+lamctl mysql --db nama_database                   # Buka client langsung ke database tertentu
 ```
+
+> `lamctl mysql` membuka shell mysql interaktif (setara `mysql -u <user> -p`)
+> tanpa harus `cd` ke `/opt/lampp/bin` dan tanpa `sudo`. Pakai credential dari `.env`
+> atau override flag. Password dikirim lewat env `MYSQL_PWD`, tidak tampil di proses.
 
 ### Bantuan
 
@@ -97,7 +105,7 @@ lamctl db --help
 
 Nilai kredensial diambil dengan urutan prioritas berikut (tertinggi dulu):
 
-1. **CLI flag** — `--host`, `--port`, `--user`, `--password`, `--db`
+1. **CLI flag** — `--host`, `--port`, `--user`, `--password`, `--db`, `--db_engine`
 2. **Environment variable** — dari file `.env` (auto-load) atau variabel lingkungan
 3. **Nilai default** — `localhost`, `3306`, `root`
 
@@ -116,6 +124,7 @@ lamctl db list --host 192.168.1.10 --port 3307 --user admin --password secret
 | `LAMCTL_DB_USER` | `root` | Username MySQL |
 | `LAMCTL_DB_PASS` | empty | Password MySQL |
 | `LAMCTL_DB_NAME` | empty | Nama database default |
+| `LAMCTL_DB_ENGINE` | empty | Database engine yang digunakan (misal `mysql`) |
 | `LAMCTL_XAMPP_PATH` | `/opt/lampp/lampp` | Path binary lampp |
 
 ## Command Reference
@@ -131,6 +140,7 @@ lamctl db list --host 192.168.1.10 --port 3307 --user admin --password secret
 | `lamctl db query "<SQL>"` | Jalankan query SQL |
 | `lamctl db create <name>` | Buat database |
 | `lamctl db drop <name>` | Hapus database |
+| `lamctl mysql` | Buka mysql client interaktif |
 
 ### Global Flags
 
@@ -141,6 +151,7 @@ lamctl db list --host 192.168.1.10 --port 3307 --user admin --password secret
 | `--user` | Username database |
 | `--password` | Password database |
 | `--db` | Nama database |
+| `--db_engine` | Engine database yang digunakan (misal `mysql`) |
 | `-h, --help` | Tampilkan bantuan |
 
 ## Arsitektur
