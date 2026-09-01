@@ -17,22 +17,22 @@ func New(path string) *LamppRepository {
 }
 
 func (r *LamppRepository) Start() error {
-	return r.run("start")
+	return r.run("Start")
 }
 
 func (r *LamppRepository) Stop() error {
-	return r.run("stop")
+	return r.run("Stop")
 }
 
 func (r *LamppRepository) Restart() error {
-	return r.run("restart")
+	return r.run("Restart")
 }
 
 func (r *LamppRepository) Status() (string, error) {
-	out, err := exec.Command(r.path, "status").CombinedOutput()	
+	out, err := exec.Command(r.path, "Status").CombinedOutput()	
 
 	if err != nil {
-		return string(out), fmt.Errorf("gagal cek status: %w\n%s", err, out)
+		return string(out), fmt.Errorf("Gagal cek status: %w\n%s", err, out)
 	}
 	
 	return string(out), nil
