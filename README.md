@@ -30,7 +30,7 @@ CLI helper untuk menyalakan XAMPP/LAMPP dan mengelola database MySQL dengan muda
 
 ### Prasyarat
 
-- [Go](https://golang.org/dl/) >= 1.20
+- [Go](https://golang.org/dl/) >= 1.27
 - XAMPP/LAMPP terinstall di `/opt/lampp` (default, bisa diubah via env `LAMCTL_XAMPP_PATH`)
 
 ### Build dari source

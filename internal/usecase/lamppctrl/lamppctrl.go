@@ -1,8 +1,8 @@
 package lamppctrl
 
 import (
-	"stackctl/internal/entity"
-	"stackctl/internal/repository/lampp"
+	"lamctl/internal/entity"
+	"lamctl/internal/repository/lampp"
 )
 
 type UseCase struct {

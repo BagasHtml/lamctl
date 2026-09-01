@@ -3,8 +3,10 @@ package setting
 import (
 	"fmt"
 	"os"
+
 	"github.com/joho/godotenv"
-	"stackctl/internal/entity"
+
+	"lamctl/internal/entity"
 )
 
 const EnvFile = ".env"
@@ -31,7 +33,7 @@ func (r *SettingRepository) Load() error {
 		User:     envOrDefault("LAMCTL_DB_USER", "root"),
 		Password: os.Getenv("LAMCTL_DB_PASS"),
 		DBName:   os.Getenv("LAMCTL_DB_NAME"),
-		DBEngine: os.Getenv("LAMCTL_DB_ENGINE"),	
+		DBEngine: os.Getenv("LAMCTL_DB_ENGINE"),
 	}
 
 	return nil
@@ -76,6 +78,7 @@ func (r *SettingRepository) Save(cred entity.Credential) error {
 		return fmt.Errorf("gagal menyimpan %s: %w", r.path, err)
 	}
 
+	r.credential = cred
 	return nil
 }
 

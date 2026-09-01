@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"stackctl/internal/entity"
-	"stackctl/internal/setting"
+	"lamctl/internal/entity"
+	"lamctl/internal/setting"
 )
 
 const logo = `.__                         __  .__
@@ -24,9 +24,12 @@ var RootCmd = &cobra.Command{
 	Long: `lamctl adalah CLI helper untuk menyalakan XAMPP/LAMPP
 dan mengelola database MySQL dengan mudah.`,
 	Args: cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Printf("%s\n\n", logo)
-		cmd.Help()
+	RunE: func(cmd *cobra.Command, args []string) error {
+		_, err := cmd.OutOrStdout().Write([]byte(logo + "\n\n"))
+		if err != nil {
+			return err
+		}
+		return cmd.Help()
 	},
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		settings = setting.New(filepath.Join(".", setting.EnvFile))
@@ -39,7 +42,7 @@ dan mengelola database MySQL dengan mudah.`,
 		user, _ := cmd.Flags().GetString("user")
 		password, _ := cmd.Flags().GetString("password")
 		dbName, _ := cmd.Flags().GetString("db")
-		dbEngine, _ := cmd.Flags().GetString("dbEngine")
+		dbEngine, _ := cmd.Flags().GetString("db_engine")
 
 		settings.ApplyFlags(entity.Credential{
 			Host: host, Port: port, User: user, Password: password, DBName: dbName, DBEngine: dbEngine,

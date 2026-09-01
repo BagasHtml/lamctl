@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"stackctl/internal/entity"
-	"stackctl/internal/usecase/lamppctrl"
+	"lamctl/internal/entity"
+	"lamctl/internal/usecase/lamppctrl"
 )
 
 func newLamppCommand(action, description string) *cobra.Command {

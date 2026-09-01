@@ -3,8 +3,8 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"stackctl/internal/repository/mysqldb"
-	"stackctl/internal/usecase/dbmanager"
+	"lamctl/internal/repository/mysqldb"
+	"lamctl/internal/usecase/dbmanager"
 )
 
 var mysqlCmd = &cobra.Command{

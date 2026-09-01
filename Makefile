@@ -1,4 +1,4 @@
-.PHONY: build install uninstall clean
+.PHONY: build install uninstall clean lint test check
 
 build:
 	go build -o lamctl
@@ -11,3 +11,11 @@ uninstall:
 
 clean:
 	rm -f lamctl
+
+lint:
+	golangci-lint run ./...
+
+test:
+	go test ./...
+
+check: lint test

@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"stackctl/internal/usecase/dbmanager"
+	"lamctl/internal/usecase/dbmanager"
 )
 
 var dbCmd = &cobra.Command{

@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"stackctl/internal/entity"
+	"lamctl/internal/entity"
 )
 
 func FindClientPath(xamppPath string) string {

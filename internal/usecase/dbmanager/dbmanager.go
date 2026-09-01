@@ -1,8 +1,8 @@
 package dbmanager
 
 import (
-	"stackctl/internal/entity"
-	"stackctl/internal/repository/mysqldb"
+	"lamctl/internal/entity"
+	"lamctl/internal/repository/mysqldb"
 )
 
 type UseCase struct {
@@ -18,7 +18,7 @@ func (u *UseCase) ListDatabases() ([]entity.Database, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer repo.Close()
+	defer func() { _ = repo.Close() }()
 
 	return repo.ListDatabases()
 }
@@ -28,7 +28,7 @@ func (u *UseCase) Query(sql string) ([][]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer repo.Close()
+	defer func() { _ = repo.Close() }()
 
 	return repo.QueryRows(sql)
 }
@@ -38,7 +38,7 @@ func (u *UseCase) Create(name string) error {
 	if err != nil {
 		return err
 	}
-	defer repo.Close()
+	defer func() { _ = repo.Close() }()
 
 	return repo.CreateDatabase(name)
 }
@@ -48,7 +48,7 @@ func (u *UseCase) Drop(name string) error {
 	if err != nil {
 		return err
 	}
-	defer repo.Close()
+	defer func() { _ = repo.Close() }()
 
 	return repo.DropDatabase(name)
 }

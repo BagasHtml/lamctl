@@ -2,14 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
 
-	"stackctl/internal/entity"
-	"stackctl/internal/setting"
+	"lamctl/internal/entity"
+	"lamctl/internal/setting"
 )
 
 var initCmd = &cobra.Command{
@@ -50,7 +49,7 @@ var initCmd = &cobra.Command{
 				Prompt: &survey.Input{Message: "Database name (kosongkan untuk koneksi umum)"},
 			},
 			{
-				Name: "dbengine",
+				Name:   "dbengine",
 				Prompt: &survey.Input{Message: "Database Engine: ", Default: "mysql"},
 			},
 		}
@@ -72,13 +71,6 @@ var initCmd = &cobra.Command{
 		if err != nil {
 			abs = setting.EnvFile
 		}
-
-		_ = os.Setenv("LAMCTL_DB_HOST", cred.Host)
-		_ = os.Setenv("LAMCTL_DB_PORT", cred.Port)
-		_ = os.Setenv("LAMCTL_DB_USER", cred.User)
-		_ = os.Setenv("LAMCTL_DB_PASS", cred.Password)
-		_ = os.Setenv("LAMCTL_DB_NAME", cred.DBName)
-		_ = os.Setenv("LAMCTL_DB_ENGINE", cred.DBEngine)
 
 		fmt.Printf("Kredensial tersimpan di %s\n", abs)
 		return nil

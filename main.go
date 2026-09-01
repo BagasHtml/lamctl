@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"stackctl/cmd"
+	"lamctl/cmd"
 )
 
 func main() {

@@ -3,11 +3,21 @@ package mysqldb
 import (
 	"database/sql"
 	"fmt"
+	"regexp"
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"stackctl/internal/entity"
+	"lamctl/internal/entity"
 )
+
+var validDBName = regexp.MustCompile(`^[A-Za-z0-9_]+$`)
+
+func validateDBName(name string) error {
+	if !validDBName.MatchString(name) {
+		return fmt.Errorf("nama database tidak valid: %q (hanya A-Z, a-z, 0-9, dan _ diperbolehkan)", name)
+	}
+	return nil
+}
 
 type MySQLRepository struct {
 	db *sql.DB
@@ -33,7 +43,7 @@ func (r *MySQLRepository) ListDatabases() ([]entity.Database, error) {
 	if err != nil {
 		return nil, fmt.Errorf("gagal list database: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	var databases []entity.Database
 	for rows.Next() {
@@ -52,7 +62,7 @@ func (r *MySQLRepository) QueryRows(query string) ([][]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("gagal menjalankan query: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	columns, err := rows.Columns()
 	if err != nil {
@@ -84,14 +94,20 @@ func (r *MySQLRepository) QueryRows(query string) ([][]string, error) {
 }
 
 func (r *MySQLRepository) CreateDatabase(name string) error {
-	if _, err := r.db.Exec("CREATE DATABASE IF NOT EXISTS " + name); err != nil {
+	if err := validateDBName(name); err != nil {
+		return err
+	}
+	if _, err := r.db.Exec("CREATE DATABASE IF NOT EXISTS `" + name + "`"); err != nil {
 		return fmt.Errorf("gagal membuat database: %w", err)
 	}
 	return nil
 }
 
 func (r *MySQLRepository) DropDatabase(name string) error {
-	if _, err := r.db.Exec("DROP DATABASE IF EXISTS " + name); err != nil {
+	if err := validateDBName(name); err != nil {
+		return err
+	}
+	if _, err := r.db.Exec("DROP DATABASE IF EXISTS `" + name + "`"); err != nil {
 		return fmt.Errorf("gagal menghapus database: %w", err)
 	}
 	return nil

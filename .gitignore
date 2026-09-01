@@ -1,2 +1,8 @@
 lamctl
 .env
+
+## Editor swap / backup files
+*.swp
+*.swo
+*~
+*.kate-swp
